@@ -5,19 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe</title>
     <link rel="stylesheet" href="./style.css">
+    <script src="./script.js" defer></script>
 </head>
 <body>
-    <script src="./script.js"></script>
     <div class="board"> 
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
+        <div id="0row0col" data-row="0" data-col="0" class="cell">&nbsp;</div>
+        <div id="0row1col" data-row="0" data-col="1" class="cell">&nbsp;</div>
+        <div id="0row2col" data-row="0" data-col="2" class="cell">&nbsp;</div>
+        <div id="1row0col" data-row="1" data-col="0" class="cell">&nbsp;</div>
+        <div id="1row1col" data-row="1" data-col="1" class="cell">&nbsp;</div>
+        <div id="1row2col" data-row="1" data-col="2" class="cell">&nbsp;</div>
+        <div id="2row0col" data-row="2" data-col="0" class="cell">&nbsp;</div>
+        <div id="2row1col" data-row="2" data-col="1" class="cell">&nbsp;</div>
+        <div id="2row2col" data-row="2" data-col="2" class="cell">&nbsp;</div>
+    </div>
+    <div class="buttons">
+        <button id="create-btn">Create player</button>&nbsp;&nbsp;
+        <button id="reset-btn">Reset</button>
+    </div>
+    <div id="status-box">
+        Player 1 turn
     </div>
 </body>
 </html>
