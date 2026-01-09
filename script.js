@@ -4,41 +4,42 @@
 
 function createGameboard() {
 
-    const emptyGameboard = [
+    let cells = [
         [' ', ' ', ' '],
         [' ', ' ', ' '],
         [' ', ' ', ' ']
     ];
 
-    let gameboard = structuredClone(emptyGameboard);
-
+    
     const putSymbol = (symbol, rowNum, colNum) => {
-        gameboard[rowNum][colNum] = symbol;
+        cells[rowNum][colNum] = symbol;
     };
 
     const print = () => {
-        console.table(gameboard);
+        console.table(cells);
     };
 
     const clear = () => {
-        gameboard = structuredClone(emptyGameboard);
+        cells.length = 0;
+        cells.push([' ', ' ', ' ']);
+        cells.push([' ', ' ', ' ']);
+        cells.push([' ', ' ', ' ']);
     };
 
-    const domRender = () => {
-        
-        const cells = document.querySelectorAll('.cell');
+    const domRender = () => {        
+        const domCells = document.querySelectorAll('.cell');
 
-        cells.forEach((cell) => {
-            cell.textContent = gameboard[cell.dataset.row][cell.dataset.col];
+        domCells.forEach((domCell) => {
+            domCell.textContent = cells[domCell.dataset.row][domCell.dataset.col];
         });
 
     };
     
-    return { gameboard, print, putSymbol, clear, domRender };
+    return { cells, print, putSymbol, clear, domRender };
 }
 
 function createController() {
-    const gameboard = createGameboard();
+    let gameboard = createGameboard();
     let XName = 'Player 1';
     let OName = 'Player 2';
     let playerTurn = 'X';
@@ -49,20 +50,32 @@ function createController() {
             XName = prompt('X Player name?', XName);
             OName = prompt('O Player name?', OName);
             updatePlayerTurnText();
-        }
+        };
 
-        const cells = document.querySelectorAll('.cell');
+        const domCells = document.querySelectorAll('.cell');
 
-        cells.forEach((cell) => {
-            cell.onclick = () => {
-                turn(cell.dataset.row, cell.dataset.col);
+        domCells.forEach((domCell) => {
+            domCell.onclick = () => {
+                turn(domCell.dataset.row, domCell.dataset.col);
             };
         });
+
+        document.querySelector('#reset-btn').onclick = (event) => {
+            playerTurn = 'X';
+            isGameOver = false;
+            gameboard.clear();
+            gameboard.domRender();
+            updatePlayerTurnText();
+        };
 
     };
 
     const turn = (rowNum, colNum) => {
         if (isGameOver) {
+            return;
+        }
+
+        if (gameboard.cells[rowNum][colNum].trim() != '') {
             return;
         }
         
@@ -94,33 +107,33 @@ function createController() {
 
     const isWin = (rowNum, colNum) => {
         //vertical
-        if (gameboard.gameboard[rowNum][0] == playerTurn
-            && gameboard.gameboard[rowNum][1] == playerTurn
-            && gameboard.gameboard[rowNum][2] == playerTurn
+        if (gameboard.cells[rowNum][0] == playerTurn
+            && gameboard.cells[rowNum][1] == playerTurn
+            && gameboard.cells[rowNum][2] == playerTurn
         ) {
             return true;
         }
         
         // horizontal
-        if (gameboard.gameboard[0][colNum] == playerTurn
-            && gameboard.gameboard[1][colNum] == playerTurn
-            && gameboard.gameboard[2][colNum] == playerTurn
+        if (gameboard.cells[0][colNum] == playerTurn
+            && gameboard.cells[1][colNum] == playerTurn
+            && gameboard.cells[2][colNum] == playerTurn
         ) {
             return true;
         }
 
         // slant backslash
-        if (gameboard.gameboard[0][0] == playerTurn
-            && gameboard.gameboard[1][1] == playerTurn
-            && gameboard.gameboard[2][2] == playerTurn
+        if (gameboard.cells[0][0] == playerTurn
+            && gameboard.cells[1][1] == playerTurn
+            && gameboard.cells[2][2] == playerTurn
         ) {
             return true;
         }
 
         // slant slash
-        if (gameboard.gameboard[2][0] == playerTurn
-            && gameboard.gameboard[1][1] == playerTurn
-            && gameboard.gameboard[0][2] == playerTurn
+        if (gameboard.cells[2][0] == playerTurn
+            && gameboard.cells[1][1] == playerTurn
+            && gameboard.cells[0][2] == playerTurn
         ) {
             return true;
         }
@@ -142,14 +155,11 @@ function createController() {
         document.querySelector('#status-box').textContent = text;
     };
 
-    domInit();
-}
 
-// const gameboard = createGameboard();
-// gameboard.putSymbol('X', 0, 0);
-// gameboard.print();
-// gameboard.clear();
-// gameboard.print();
+    domInit();
+
+    return { gameboard }
+}
 
 const game = createController();
 
